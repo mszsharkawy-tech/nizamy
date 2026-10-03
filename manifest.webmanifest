@@ -1,0 +1,11 @@
+{
+  "name": "نظامي الشخصي",
+  "short_name": "نظامي",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#070a1c",
+  "theme_color": "#0d1028",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": []
+}

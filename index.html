@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0d1028">
+  <title>نظامي الشخصي</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">لوحة التحكم</div>
+        <h1>نظامي الشخصي</h1>
+      </div>
+      <button id="settingsBtn" class="icon-btn" aria-label="الإعدادات">⚙️</button>
+    </header>
+
+    <section class="hero card">
+      <div>
+        <div class="pill">ملخص اليوم</div>
+        <h2>عاداتك، مهامك وأهدافك<br><span>في مكان واحد</span></h2>
+        <p>سجّل يومك بسرعة، وشاهد التقدم يتحدث تلقائيًا.</p>
+      </div>
+      <div class="hero-score">
+        <strong id="todayScore">0%</strong>
+        <span>إنجاز اليوم</span>
+      </div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab active" data-view="dashboard">الرئيسية</button>
+      <button class="tab" data-view="habits">العادات</button>
+      <button class="tab" data-view="tasks">المهام</button>
+      <button class="tab" data-view="goals">الأهداف</button>
+      <button class="tab" data-view="year">السنة</button>
+    </nav>
+
+    <main>
+      <section id="dashboard" class="view active">
+        <div class="stats-grid">
+          <div class="stat card"><span>نسبة العادات</span><strong id="habitRate">0%</strong></div>
+          <div class="stat card"><span>مهام مكتملة</span><strong id="taskCount">0</strong></div>
+          <div class="stat card"><span>متوسط النوم</span><strong id="sleepAvg">0.0</strong></div>
+          <div class="stat card"><span>تقدم الأهداف</span><strong id="goalRate">0%</strong></div>
+        </div>
+
+        <div class="card section-card">
+          <div class="section-head">
+            <div><span class="eyebrow">العادات</span><h3>متابعة اليوم</h3></div>
+            <button class="small-btn" data-jump="habits">عرض الكل</button>
+          </div>
+          <div id="habitQuick" class="quick-list"></div>
+        </div>
+
+        <div class="card section-card">
+          <div class="section-head">
+            <div><span class="eyebrow">النوم</span><h3>ساعات النوم</h3></div>
+          </div>
+          <div class="sleep-row">
+            <input id="sleepHours" type="number" min="0" max="24" step="0.5" placeholder="مثلاً 7.5">
+            <button id="saveSleep" class="primary-btn">حفظ</button>
+          </div>
+        </div>
+
+        <div class="card section-card">
+          <div class="section-head">
+            <div><span class="eyebrow">مؤشرات</span><h3>آخر 7 أيام</h3></div>
+          </div>
+          <canvas id="weekChart" width="760" height="260"></canvas>
+        </div>
+      </section>
+
+      <section id="habits" class="view">
+        <div class="card section-card">
+          <div class="section-head"><div><span class="eyebrow">العادات</span><h3>متتبع العادات</h3></div></div>
+          <div class="inline-form">
+            <input id="newHabit" placeholder="أضف عادة جديدة">
+            <button id="addHabit" class="primary-btn">إضافة</button>
+          </div>
+          <div id="habitsList" class="items-list"></div>
+        </div>
+      </section>
+
+      <section id="tasks" class="view">
+        <div class="card section-card">
+          <div class="section-head"><div><span class="eyebrow">المهام</span><h3>مهام الأسبوع</h3></div></div>
+          <div class="inline-form">
+            <input id="newTask" placeholder="اكتب مهمة">
+            <input id="taskDate" type="date">
+            <button id="addTask" class="primary-btn">إضافة</button>
+          </div>
+          <div id="tasksList" class="items-list"></div>
+        </div>
+      </section>
+
+      <section id="goals" class="view">
+        <div class="card section-card">
+          <div class="section-head"><div><span class="eyebrow">الأهداف</span><h3>قسّم هدفك لخطوات</h3></div></div>
+          <div class="goal-form">
+            <input id="goalTitle" placeholder="اسم الهدف">
+            <input id="goalDeadline" type="date">
+            <textarea id="goalSteps" rows="3" placeholder="اكتب الخطوات، كل خطوة في سطر"></textarea>
+            <button id="addGoal" class="primary-btn">إضافة الهدف</button>
+          </div>
+          <div id="goalsList" class="goals-grid"></div>
+        </div>
+      </section>
+
+      <section id="year" class="view">
+        <div class="card section-card">
+          <div class="section-head"><div><span class="eyebrow">الملخص السنوي</span><h3>سنتك في جدول واحد</h3></div></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>الشهر</th><th>العادات</th><th>المهام</th><th>النوم</th><th>الأهداف</th></tr></thead>
+              <tbody id="yearTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="section-head">
+        <div><span class="eyebrow">Google Sync</span><h3>ربط Google Sheets</h3></div>
+        <button id="closeSettings" class="icon-btn">✕</button>
+      </div>
+      <p class="muted">ألصق رابط Google Apps Script Web App بعد النشر. سيستمر التطبيق بالعمل محليًا حتى قبل الربط.</p>
+      <input id="apiUrl" placeholder="https://script.google.com/macros/s/.../exec">
+      <div class="modal-actions">
+        <button id="saveApi" class="primary-btn">حفظ الرابط</button>
+        <button id="syncNow" class="secondary-btn">مزامنة الآن</button>
+      </div>
+      <div id="syncStatus" class="sync-status">غير متصل</div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
